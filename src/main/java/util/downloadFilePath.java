@@ -18,38 +18,38 @@ public class downloadFilePath {
 
 	public static void copyFile_Directory(String origin, String destDir, String destination) throws IOException {
 
-	    Path FROM = Paths.get(origin);
-	    Path TO = Paths.get(destination);
-	    File directory = new File(String.valueOf(destDir));
+		Path FROM = Paths.get(origin);
+		Path TO = Paths.get(destination);
+		File directory = new File(String.valueOf(destDir));
 
-	    if (!directory.exists()) {
-	        directory.mkdir();
-	    }
-	        //overwrite the destination file if it exists, and copy
-	        // the file attributes, including the rwx permissions
-	     CopyOption[] options = new CopyOption[]{
-	                StandardCopyOption.REPLACE_EXISTING,
-	                StandardCopyOption.COPY_ATTRIBUTES
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+		//overwrite the destination file if it exists, and copy
+		// the file attributes, including the rwx permissions
+		CopyOption[] options = new CopyOption[]{
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.COPY_ATTRIBUTES
 
-	        };
-	        Files.copy(FROM, TO, options);
-	        
+		};
+		Files.copy(FROM, TO, options);
+
 
 
 	}
 	public static File getTheNewestFile(String filePath, String ext) {
-	    File theNewestFile = null;
-	    File dir = new File(filePath);
-	    FileFilter fileFilter = new WildcardFileFilter("*." + ext);
-	    File[] files = dir.listFiles(fileFilter);
+		File theNewestFile = null;
+		File dir = new File(filePath);
+		FileFilter fileFilter = new WildcardFileFilter("*." + ext);
+		File[] files = dir.listFiles(fileFilter);
+		System.out.println("File present +"+files.length);
+		if (files.length > 0) {
+			/** The newest file comes first **/
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+			theNewestFile = files[0];
+		}
 
-	    if (files.length > 0) {
-	        /** The newest file comes first **/
-	        Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-	        theNewestFile = files[0];
-	    }
-
-	    return theNewestFile;
+		return theNewestFile;
 	}
 	public static void main(String[] args) throws IOException
 	{

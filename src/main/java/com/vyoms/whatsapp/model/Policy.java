@@ -3,14 +3,16 @@ package com.vyoms.whatsapp.model;
 public class Policy {
 
 	public boolean agent = false;
-	public String imageOption = null;
+	public String PDFOption = null;
+	
 	private String agent_Im_Id;
 
 	public boolean attachment=false;
 
 	public boolean cheque = false;
 
-	public boolean chequeImage = false;
+	public boolean chequePDF = false;
+	
 	public boolean convert = false;
 
 	private String defect_description;
@@ -158,9 +160,9 @@ public class Policy {
 		return emailId;
 	}
 
-	public String getImageOption() {
+	public String getPDFOption() {
 		// TODO Auto-generated method stub
-		return this.imageOption;
+		return this.PDFOption;
 	}
 
 	public String getIssueRelated()
@@ -242,8 +244,8 @@ public class Policy {
 		return cheque;
 	}
 
-	public boolean isChequeImage() {
-		return chequeImage;
+	public boolean isChequePDF() {
+		return chequePDF;
 	}
 
 	public boolean isConvert() {
@@ -299,8 +301,8 @@ public class Policy {
 	public void setCheque(boolean cheque) {
 		this.cheque = cheque;
 	}
-	public void setChequeImage(boolean chequeImage) {
-		this.chequeImage = chequeImage;
+	public void setChequePDF(boolean chequePDF) {
+		this.chequePDF = chequePDF;
 	}
 	public void setConvert(boolean convert) {
 		this.convert = convert;
@@ -314,9 +316,9 @@ public class Policy {
 		this.emailId = emailId;
 	}
 
-	public String setImageOption(String b) {
+	public String setPDFOption(String b) {
 		// TODO Auto-generated method stub
-		return this.imageOption=b;
+		return this.PDFOption=b;
 		
 	}
 

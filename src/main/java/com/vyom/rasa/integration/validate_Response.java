@@ -14,11 +14,11 @@ import org.json.JSONObject;
 		private final String urlRaiseRequest = "http://192.168.1.194:8888/aeengine/rest/execute";
 
 		// POST action URL
-		private final static String urlPOST = "http://10.41.16.111:8080/parse";
+		private final static String urlPOST = "http://10.41.16.87:8080/parse";
 
 		// Post data or a payload
 
-		public String inputLine=null;;
+		public String inputLine=null;
 		// Main class
 		public String check_response(String msg) throws Exception
 		{
@@ -49,25 +49,25 @@ import org.json.JSONObject;
 			// Reading the HTML output of the POST HTTP request
 			//int responseCode = con.getResponseCode();
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String str = null;
+			String str = "";
 			while ((inputLine = in.readLine()) != null)
 			{
-				str=inputLine;
+				str=str+inputLine;
 			}
-			System.out.println(str);
+			System.out.println("Json code="+str);
 			JSONObject intent = new JSONObject(str).getJSONObject("intent");
 			//String name = new JSONObject(str).getString("text");
 			System.out.println("confidence"+intent.get("confidence"));
 			System.out.println("name="+intent.get("name"));
 			in.close();
-			if (Double.parseDouble(intent.get("confidence").toString())>=1)
+			/*if (Double.parseDouble(intent.get("confidence").toString())>=1)
 					{
 						return "";
 					}
 			else
-			{
+			{*/
 				return intent.get("name").toString();
-			}
+			//}
 			
 		}
 
