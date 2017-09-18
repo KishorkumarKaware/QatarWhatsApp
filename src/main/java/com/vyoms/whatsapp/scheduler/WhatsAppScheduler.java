@@ -14,7 +14,7 @@ import com.vyoms.whatsapp.type.WhatsApp;
 
 @Component
 public class WhatsAppScheduler {
-/*
+    /*
 	@Autowired
 	AgentMasterService agentMasterService;
 
@@ -25,7 +25,7 @@ public class WhatsAppScheduler {
 	/*
 	@Autowired
 	PinMasterService pinMasterService;
-*/	
+    */	
 	public WhatsApp whatsAppAccount;
 
 	public void init() {

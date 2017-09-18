@@ -2,9 +2,30 @@ package com.vyoms.whatsapp.model;
 
 public class Policy {
 
+	//public VehicalDetails vehicalDetail = null;
+
+	private String chassis_no = null;
+
+	private String model = null;
+
+	private String make = null;
+
+	private String engine_no  = null;
+
+	private String year = null; 
+
+	private String cylinders = null;
+
+	private String vehicalValue = null;
+
+	private String email = null;
+
+	private String contactNo = null;
+
 	public boolean agent = false;
+
 	public String PDFOption = null;
-	
+
 	private String agent_Im_Id;
 
 	public boolean attachment=false;
@@ -12,8 +33,12 @@ public class Policy {
 	public boolean cheque = false;
 
 	public boolean chequePDF = false;
-	
+
 	public boolean convert = false;
+
+	public boolean isCover = false;
+
+	public String cover;
 
 	private String defect_description;
 
@@ -37,6 +62,8 @@ public class Policy {
 
 	public String planName = null;
 
+	public String  planPrem = null;
+
 	private String policyQuoteNo;
 
 	public String prem = null;
@@ -54,11 +81,11 @@ public class Policy {
 	public String stateCity = null;
 
 	public String sumInsured = null;
-	
+
 	private String trans;
-	
+
 	public String emailId = null;
-	
+
 	public String UCVId = null;
 
 	private String samaccount;
@@ -70,7 +97,102 @@ public class Policy {
 	private String customerName=null;
 
 	private String option ="";
+
+	private boolean flag = false;
 	
+	private boolean manual = false;
+	
+	public boolean isManual() {
+		return manual;
+	}
+
+	public void setManual(boolean manual) {
+		this.manual = manual;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getContactNo() {
+		return contactNo;
+	}
+
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
+	}
+
+	public String getChassis_no() {
+		return chassis_no;
+	}
+
+	public void setChassis_no(String chassis_no) {
+		this.chassis_no = chassis_no;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public String getMake() {
+		return make;
+	}
+
+	public void setMake(String make) {
+		this.make = make;
+	}
+
+	public String getEngine_no() {
+		return engine_no;
+	}
+
+	public void setEngine_no(String engine_no) {
+		this.engine_no = engine_no;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getCylinders() {
+		return cylinders;
+	}
+
+	public void setCylinders(String cylinders) {
+		this.cylinders = cylinders;
+	}
+
+	public String getVehicalValue() {
+		return vehicalValue;
+	}
+
+	public void setVehicalValue(String vehicalValue) {
+		this.vehicalValue = vehicalValue;
+	}
+
+	/*public VehicalDetails getVehicalDetail() {
+		return vehicalDetail;
+	}
+
+	public void setVehicalDetail(VehicalDetails vehicalDetail) {
+		this.vehicalDetail = vehicalDetail;
+	}*/
 
 	public String getDefect_description() {
 		return defect_description;
@@ -78,6 +200,15 @@ public class Policy {
 
 	public void setDefect_description(String defect_description) {
 		this.defect_description = defect_description;
+	}
+
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 
 	public String getIssue() {
@@ -125,6 +256,14 @@ public class Policy {
 		// TODO Auto-generated constructor stub
 	}
 
+	public String getPlanPrem() {
+		return planPrem;
+	}
+
+	public void setPlanPrem(String planPrem) {
+		this.planPrem = planPrem;
+	}
+
 	public String get_defect_description() {
 		// TODO Auto-generated method stub
 		return defect_description;
@@ -141,7 +280,7 @@ public class Policy {
 	}
 
 	public  String getAgent_Im_Id() {
-		
+
 		return agent_Im_Id;
 	}
 
@@ -173,9 +312,6 @@ public class Policy {
 	public String getMessage() {
 		return message;
 	}
-	public String getName() {
-		return name;
-	}
 	public String getPin() {
 		return pin;
 	}
@@ -206,12 +342,12 @@ public class Policy {
 	public String getResult() {
 		return result;
 	}
-	
+
 	public String getSamAccountName() {
 		// TODO Auto-generated method stub
 		return samaccount;
 	}
-	
+
 	public String getSlipNo() {
 		// TODO Auto-generated method stub
 		return slipNo;
@@ -228,9 +364,9 @@ public class Policy {
 	public String getTransaction() {
 		// TODO Auto-generated method stub
 		return trans;
-		
+
 	}
-	
+
 	public String getUCVId() {
 		// TODO Auto-generated method stub
 		return UCVId;
@@ -291,7 +427,7 @@ public class Policy {
 		this.agent = agent;
 	}
 	public  void setAgent_Im_Id(String agent_Im_Id) {
-		
+
 		this.agent_Im_Id = agent_Im_Id;
 	}
 	public void setAttachment(boolean attachment) {
@@ -319,7 +455,7 @@ public class Policy {
 	public String setPDFOption(String b) {
 		// TODO Auto-generated method stub
 		return this.PDFOption=b;
-		
+
 	}
 
 	public void setIntermediate(boolean intermediate) {
@@ -378,16 +514,31 @@ public class Policy {
 	public void setRemark(String remark) {
 		this.remark=remark;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setResult(String result) {
 		this.result = result;
 	}
+
 	public String setSamAccount(String samaccount) {
 		return this.samaccount=samaccount;
-		
-		
+	}
+
+	public boolean isCover() {
+		return isCover;
+	}
+
+	public void setCover(boolean isCover) {
+		this.isCover = isCover;
+	}
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
 	}
 
 	public void setSlipNo(String slipNo) {
@@ -397,7 +548,7 @@ public class Policy {
 	public void setStart(boolean start) {
 		this.start = start;
 	}
-	
+
 	public void setStateCity(String stateCity) {
 		this.stateCity = stateCity;
 	}
@@ -408,14 +559,14 @@ public class Policy {
 	public void setTransaction(String trans) {
 		// TODO Auto-generated method stub
 		this.trans=trans;
-		
+
 	}
 	public void setUCVId(String UCVId) {
 		// TODO Auto-generated method stub
 		this.UCVId = UCVId;
 	}
 
-	
-		
-	
+
+
+
 }

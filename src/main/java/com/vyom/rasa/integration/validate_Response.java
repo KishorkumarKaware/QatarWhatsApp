@@ -14,7 +14,7 @@ import org.json.JSONObject;
 		private final String urlRaiseRequest = "http://192.168.1.194:8888/aeengine/rest/execute";
 
 		// POST action URL
-		private final static String urlPOST = "http://10.41.16.87:8080/parse";
+		private final static String urlPOST = "http://10.41.16.111:8080/parse";
 
 		// Post data or a payload
 

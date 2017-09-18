@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import java.util.List;
-
+import java.util.Random;
 import java.util.regex.Matcher;
 
 import java.util.regex.Pattern;
@@ -36,7 +36,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 
 import com.vyom.rasa.integration.validate_Response;
-
+import com.vyom.whatsapp.rest.aduserreset.aeRestCallDoOcr;
 import com.vyoms.whatsapp.implementation.WhatsAppImplementation;
 
 import com.vyoms.whatsapp.model.AgentMaster;
@@ -46,7 +46,7 @@ import com.vyoms.whatsapp.model.EmpMaster;
 import com.vyoms.whatsapp.model.PinMaster;
 
 import com.vyoms.whatsapp.model.Policy;
-
+import com.vyoms.whatsapp.model.VehicalDetails;
 import com.vyoms.whatsapp.service.AgentMasterService;
 
 import com.vyoms.whatsapp.service.EmpMasterService;
@@ -317,24 +317,147 @@ public class WhatsApp implements WhatsAppImplementation {
 
 		intermediateIdPattern.matcher(msg);
 
+
 		Pattern.compile(
 
 				"(([A-D]{1}|[a-d]{1})[1-4]{1})|(([A-D]{1}|[a-d]{1})[1-4]{1}[$]{1}[0-9]{1,7})|(([A-D]{1}|[a-d]{1})[1-4]{1}[@]{1}[0-9]{1,5})|(([A-D]{1}|[a-d]{1})[1-4]{1}[$]{1}[0-9]{1,7}[@]{1}[0-9]{1,5})|(([A-D]{1}|[a-d]{1})[1-4]{1}[@]{1}[0-9]{1,5}[$]{1}[0-9]{1,7})");
 
 		from.split(" ");
 
+
+
 		try{
 
 			System.out.println("massage from "+from+" is "+msg);
 
-			if(msg.endsWith("page")){
+			if(msg.endsWith("pages")){
+
 				msg = "photo";
+
 			}
-			if((msg.contains("@")) || msg.equalsIgnoreCase("i") || msg.equalsIgnoreCase("ii") || msg.equalsIgnoreCase("iii") || msg.equalsIgnoreCase("no thanks")){
-				rasa_Response = msg;
+		
+			if((msg.contains("@")) || msg.equalsIgnoreCase("i") || msg.equalsIgnoreCase("ii") || msg.equalsIgnoreCase("iii") || msg.equalsIgnoreCase("no thanks") || msg.contains("91"))
+			{
+
+				if(msg.contains("@") || msg.contains(".com"))
+				{
+					if(!getMail(msg)){
+						reply ="Sorry! Enterd Email ID is invalid.";
+						sendMessage(from, reply);
+					}else
+					{
+						rasa_Response = msg;
+					}
+				}else if(msg.contains("91")){
+
+					String[] str = msg.split(" ");
+
+					for(int i=0; i<str.length; i++){
+						str[i] =str[i].replace("+", "");
+						if(str[i].contains("91")){
+							msg = "+"+str[i] +" "+ str[i+1];
+							break;
+						}
+					}
+					System.out.println("Contact number="+msg);
+					policy.get(from).setContactNo(msg);
+
+				}else
+				{
+					rasa_Response = msg;
+				}
+			}else if(msg.contains("Chassis") || msg.contains("chassis"))
+			{
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				policy.get(from).setChassis_no(rasa_Response);
+				System.out.println("Chassis Number="+rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Engine number is CAB2324).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("Engine") || msg.contains("engine"))
+			{
+
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Engine="+rasa_Response);
+				policy.get(from).setEngine_no(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Model is Sunny).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("model") || msg.contains("Model"))
+			{
+
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Model="+rasa_Response);
+				policy.get(from).setModel(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Make is Nissan).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("Make") || msg.contains("make"))
+			{
+
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Make="+rasa_Response);
+				policy.get(from).setMake(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Year is 2000).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("year") || msg.contains("Year"))
+			{
+
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Year="+rasa_Response);
+				policy.get(from).setYear(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Cylinders are 3).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("Cylinders") || msg.contains("cylinders") || msg.contains("Cylinders") || msg.contains("cylinder"))
+			{
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Cylinders="+rasa_Response);
+				policy.get(from).setCylinders(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Please provide all the other details as well (eg Vehicle value is 560000).";
+					sendMessage(from, reply);
+				}
+			}else if(msg.contains("value") || msg.contains("Value"))
+			{
+
+				String[] temp = msg.split(" ");
+				msg = temp[temp.length-1];
+				rasa_Response =msg;
+				System.out.println("Approx value="+rasa_Response);
+				policy.get(from).setVehicalValue(rasa_Response);
+				if(!policy.get(from).isPdf()){
+					reply ="Thank you! Please type \"y\" to contenue.";
+					sendMessage(from, reply);
+				}
+				
+			}else if(msg.contains("no thanks") || msg.contains("No thanks"))
+			{
+
+				rasa_Response =msg;
+				
 			}else
 			{
 				rasa_Response=(new validate_Response()).check_response(msg);
+				System.out.println("Rasa default responce="+rasa_Response);
 			}
 
 
@@ -353,11 +476,10 @@ public class WhatsApp implements WhatsAppImplementation {
 			sendMessage(from, reply);
 
 		}
+		catch(Exception e){}
 
 
-
-
-		if ((!policy.containsKey(from) && rasa_Response.equalsIgnoreCase("greet") && from.contains("8698206727")  || from.contains("8149360340")))
+		if ((!policy.containsKey(from) && (rasa_Response.equalsIgnoreCase("greet") || rasa_Response.equalsIgnoreCase("hi")) && from.contains("8698206727")  || from.contains("8149360340")))
 		{
 
 			final Policy saveImageForAgent = new Policy();
@@ -386,17 +508,16 @@ public class WhatsApp implements WhatsAppImplementation {
 
 		System.out.println("Rasa Responce="+rasa_Response);
 
-		
-
-		if(policy.containsKey(from) && policy.get(from).isStart() && rasa_Response.equalsIgnoreCase("Buy new Motor Insurance")){
+		if(policy.containsKey(from) && policy.get(from).isStart() && rasa_Response.equalsIgnoreCase("Buy new Motor Insurance"))
+		{
 			policy.get(from).setOption(rasa_Response);
-			reply="Please enter chassis number or attach a vehicle registration card (Please upload image in pdf format)";
+			reply="Please enter the chassis number or attach a vehicle registration card (Please upload image in pdf format)";
 
 			sendMessage(from, msg);
 
 		}
 
-		if (policy.containsKey(from) && policy.get(from).isStart() && policy.get(from).getPDFOption()==null && rasa_Response.equalsIgnoreCase("photo"))
+		/*if (policy.containsKey(from) && policy.get(from).isStart() && policy.get(from).getPDFOption()==null && rasa_Response.equalsIgnoreCase("photo"))
 
 		{
 
@@ -405,11 +526,13 @@ public class WhatsApp implements WhatsAppImplementation {
 			reply="Currently, I am in learning phase, so you will get a slight delay in response, kindly cooperate with me.";
 
 			sendMessage(from, reply);
-		}
+		}*/
 
 		if(policy.containsKey(from) && !policy.get(from).isChequePDF() && policy.get(from).isStart() && rasa_Response.contains("photo"))
 
 		{
+			policy.get(from).setPDFOption(rasa_Response);
+
 			String destination="D:\\Finesse\\Documents\\"+"\\"+from+"\\"+"\\vehicle_registration\\";
 
 			System.out.println("Downloading Image...");
@@ -433,125 +556,212 @@ public class WhatsApp implements WhatsAppImplementation {
 			//downloadImage();
 
 			boolean   r= downloadDoc();
+			//Thread.sleep(2000);
+			try{
+				//System.out.println(downloadFilePath.getTheNewestFile(downloadFilepath, "jpeg").toString());
 
-			//System.out.println(downloadFilePath.getTheNewestFile(downloadFilepath, "jpeg").toString());
+				//downloadFilePath.copyFile_Directory(downloadFilePath.getTheNewestFile(downloadFilepath, "pdf").toString(), from, destination);
 
-			//downloadFilePath.copyFile_Directory(downloadFilePath.getTheNewestFile(downloadFilepath, "pdf").toString(), from, destination);
+				//FileUtils.copyFileToDirectory(new File(downloadFilePath.getTheNewestFile(downloadFilepath, "pdf").toString()), new File(destination));
 
-			//FileUtils.copyFileToDirectory(new File(downloadFilePath.getTheNewestFile(downloadFilepath, "pdf").toString()), new File(destination));
+				FileUtils.copyFileToDirectory(new File (downloadFilePath.getTheNewestFile(Constants.downloadFilepath, "pdf").toString()), new File(destination));
 
-			FileUtils.copyFileToDirectory(new File (downloadFilePath.getTheNewestFile(Constants.downloadFilepath, "pdf").toString()), new File(destination));
+				
+				System.out.println(downloadFilePath.getTheNewestFile(destination, "pdf"));
 
-			System.out.println(downloadFilePath.getTheNewestFile(downloadFilepath, "pdf"));
+				policy.get(from).setChequePDF(true);
+				if(r)
+				{
+					reply="Hi,"+from+" PDF is successfully saved";//+"\n Do You want to upload another image (Y/N)";
+					policy.get(from).setPdf(true);
+				}else{
+					reply ="Sorry! I missed this file. Can please upload file again";
+				}
+				
+				sendMessage(from, reply);
+				
+				reply="Hi,"+from+" Your Pdf is processing.......Please wait...";
 
-			policy.get(from).setChequePDF(true);
+			}catch(Exception e){
 
-			reply="Hi,"+from+" Your Pdf is processing.. ...... Please wait .. ";
-
-			sendMessage(from, reply);
-
-			if(r)
-			{
-				reply="Hi,"+from+" PDF is saved into "+destination;//+"\n Do You want to upload another image (Y/N)";
-			}else{
-				reply ="Sorry! I missed this file. Can please upload file again";
+				reply ="Sorry! I missed this file. Can you please upload file again";
 			}
-			sendMessage(from, reply);
 
+			sendMessage(from, reply);
+			String result = aeRestCallDoOcr.DoOCR(downloadFilePath.getTheNewestFile(destination, "pdf").toString());
+			
+			System.out.println("Result from OCR="+ result);
+			if(result.contains("error") || result.contains("error:")){
+				reply = result;
+				sendMessage(from, reply);
+			}else{
+				//result =result.replace("|", "");
+				String[] ocrResult = result.split("\\|");
+				System.out.println(ocrResult[0]);
+				for(int i=0;i< ocrResult.length;i++){
+					System.out.println("ocr Result="+ocrResult[i]);
+					String[] keypair=ocrResult[i].split(",");
+					if(keypair[0].equalsIgnoreCase("owner")){
+						policy.get(from).setName(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("ChassisNo")){
+						policy.get(from).setChassis_no(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("EngineNo")){
+						policy.get(from).setEngine_no(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("Model")){
+						policy.get(from).setModel(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("year")){
+						policy.get(from).setYear(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("Make")){
+						policy.get(from).setMake(keypair[1]);
+					}else if(keypair[0].equalsIgnoreCase("Cylinders")){
+						policy.get(from).setCylinders(keypair[1]);
+					}else if(keypair[0].toLowerCase().contains("value")){
+						policy.get(from).setVehicalValue(keypair[1]);
+					}
+				}
+				
+			}
+			
+			
+			/*policy.get(from).setChassis_no("sdhg8389439");
+			policy.get(from).setEngine_no("9348549864");
+			policy.get(from).setMake("akjsdh");
+			policy.get(from).setModel("sdj");
+			policy.get(from).setCylenders(null);
+			policy.get(from).setVehicalValue("2014");
+			policy.get(from).setModel("sunny");
+			policy.get(from).setYear(null);*/
 			if(policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance")){
-			reply ="Dear Customer, your vehicle details are given below – "
-					+"\nChassis Number: WAUJC6K9N027861"
-					+"\nEngine Number: CAB02294"
-					+"\nMake: Nissan"
-					+"\nModel: Sunny"
-					+"\nYear: 2008"
-					+"\nCylinders: 4"
-					+"\nApprox. Vehicle Value: QAR 35,000"
-					+"\nType “y” to confirm the details (or) Type “n” to modify the details";
-			}else{
-				reply ="Dear Customer, your old policy number and vehicle details are given below – "
-						+"\nPolicy Number: PLCN201324"
-						+"\nChassis Number: WAUJC6K9N027861"
-						+"\nEngine Number: CAB02294"
-						+"\nMake: Nissan"
-						+"\nModel: Sunny"
-						+"\nYear: 2008"
-						+"\nCylinders: 4"
-						+"\nApprox. Vehicle Value: QAR 35,000"
-						+"\nType “y” to confirm the details (or) Type “n” to modify the details";
+				reply ="Dear Customer, your vehicle details from your given document are as follow \\-"
+						+"\nChassis Number: "+policy.get(from).getChassis_no()
+						+"\nEngine Number: "+policy.get(from).getEngine_no()
+						+"\nMake: "+policy.get(from).getMake()
+						+"\nModel: "+policy.get(from).getModel()
+						+"\nYear: "+policy.get(from).getYear()
+						+"\nCylinders: "+policy.get(from).getCylinders()
+						+"\nApprox. Vehicle Value: QAR "+policy.get(from).getVehicalValue()
+						+"\nType \"y\"to confirm the details (or) Type \"n\" to modify the details";
+			}else
+			{
+				reply ="Dear Customer, your vehicle details from your given document are as follow \\- "
+						+"\nPolicy Number: "+policy.get(from).getPolicyQuoteNo()
+						+"\nChassis Number: "+policy.get(from).getChassis_no()
+						+"\nEngine Number: "+policy.get(from).getEngine_no()
+						+"\nMake: "+policy.get(from).getMake()
+						+"\nModel: "+policy.get(from).getModel()
+						+"\nYear: "+policy.get(from).getYear()
+						+"\nCylinders: "+policy.get(from).getCylinders()
+						+"\nApprox. Vehicle Value: QAR "+policy.get(from).getVehicalValue()  
+						+"\nType \"y\" to confirm the details (or) Type \"n\" to modify the details";
 			}
 			sendMessage(from, reply);
 		}
 
-
-		if((policy.containsKey(from) && rasa_Response.equalsIgnoreCase("no")) && policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance"))
+		if(policy.containsKey(from) && rasa_Response.equalsIgnoreCase("no") && policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance"))
 		{
-			reply="Fine..! Which field you want to modify. Specify the field name one by one?";
+			reply="Fine..! Which field you want to modify?. Please specify the field name and related value one by one(eg. Chassis number is WAUJC6K9N027861) or upload file again.";
 			sendMessage(from, reply);
-		}
-
-		if(policy.containsKey(from) && rasa_Response.contains("Chassis")){
-
-		}
-		if(policy.containsKey(from) && rasa_Response.contains("Chassis")){
-			reply="Please provide your correct Chassis Number.";
+		}		
+		if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getChassis_no() == null))
+		{
+			reply="Please provide your correct Chassis Number.(eg. Chassis number is WAUJC6K9N027861)";
 			sendMessage(from, reply);
-		}
-
-		if(policy.containsKey(from) && rasa_Response.contains("Engine")){
-			reply="Please provide your correct Engine Number.";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getEngine_no() == null || rasa_Response.contains("Chassis") || rasa_Response.contains("chassis")))
+		{
+			reply="Please provide your correct Engine Number.(eg. Engine Number is CAB02294)";
 			sendMessage(from, reply);
-		}
-		if(policy.containsKey(from) && rasa_Response.contains("Make")){
-			reply="Please provide your correct answer(Make).";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getMake() == null || rasa_Response.contains("Engine") || rasa_Response.contains("engine")))
+		{
+			reply="Please provide manufactorar of  your vehicle (Make).(eg. Make is Nissan)";
 			sendMessage(from, reply);
-		}
-		if(policy.containsKey(from) && rasa_Response.contains("Model")){
-			reply="Please provide your vehical's correct model.";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getModel() == null || rasa_Response.contains("Make") || rasa_Response.contains("make")))
+		{
+			reply="Please provide your vehicleâ€™s model. ( eg. model is Sunny)";
 			sendMessage(from, reply);
-		}
-		if(policy.containsKey(from) && rasa_Response.contains("Year")){
-			reply="Please provide your correct year.";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getYear() == null || rasa_Response.contains("Model") || rasa_Response.contains("model")))
+		{
+			//policy.get(from).setYear("2005");
+			reply="Please provide manufacturing year of your vehicle. ( eg. year is 2000)";
 			sendMessage(from, reply);
-		}
-		if(policy.containsKey(from) && rasa_Response.contains("Cylinders")){
-			reply="how many cylenders are there in your vehical.";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getCylinders() == null || rasa_Response.contains("Year") || rasa_Response.contains("year")))
+		{
+			//policy.get(from).setCylenders("4");
+			reply="How many cylinders are there in your vehicle? (eg. Cylinders are 4)";
 			sendMessage(from, reply);
-		}
-		if(policy.containsKey(from) && (rasa_Response.contains("Vehicle Value") || rasa_Response.contains("Value"))){
-			reply="What is your vehical's approx value?";
+		}else if((policy.get(from).isPdf() && policy.containsKey(from) && policy.get(from).getVehicalValue() == null || rasa_Response.contains("Cylinders") || rasa_Response.contains("cylinders")))
+		{
+			reply="Provide is your vehicle's approx value. (eg. Approx value is 35000)";
+			sendMessage(from, reply);
+		}else if((policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance") || policy.get(from).getOption().equalsIgnoreCase("Renew motor insurance")) && (policy.containsKey(from) && ((rasa_Response.equalsIgnoreCase("no") || policy.get(from).isPdf()) && !policy.get(from).isFlag())))
+		{
+			policy.get(from).setFlag(true);
+			if(policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance")){
+				reply ="Dear Customer, your vehicle details from your given document are as follow \\-"
+						+"\nChassis Number: "+policy.get(from).getChassis_no()
+						+"\nEngine Number: "+policy.get(from).getEngine_no()
+						+"\nMake: "+policy.get(from).getMake()
+						+"\nModel: "+policy.get(from).getModel()
+						+"\nYear: "+policy.get(from).getYear()
+						+"\nCylinders: "+policy.get(from).getCylinders()
+						+"\nApprox. Vehicle Value: QAR "+policy.get(from).getVehicalValue()
+						+"\nType \"y\" to confirm the details (or) Type \"n\" to modify the details";
+			}else
+			{
+				reply ="Dear Customer, your vehicle details from your given document are as follow \\- "
+						+"\nPolicy Number: "+policy.get(from).getPolicyQuoteNo()
+						+"\nChassis Number: "+policy.get(from).getChassis_no()
+						+"\nEngine Number: "+policy.get(from).getEngine_no()
+						+"\nMake: "+policy.get(from).getMake()
+						+"\nModel: "+policy.get(from).getModel()
+						+"\nYear: "+policy.get(from).getYear()
+						+"\nCylinders: "+policy.get(from).getCylinders()
+						+"\nApprox. Vehicle Value: QAR "+policy.get(from).getVehicalValue()  
+						+"\nType \"y\" to confirm the details (or) Type \"n\" to modify the details";
+			}
 			sendMessage(from, reply);
 		}
 
 		/*rasa_Response = rasa_Response.replace("and","").replace(",", "");
 		String msg1[]=rasa_Response.split(" ");*/
-
-		if((policy.containsKey(from) && rasa_Response.equalsIgnoreCase("yes")) || (policy.containsKey(from) && rasa_Response.contains("@") && rasa_Response.contains(".com")))
+		Random random=new Random();
+		if((policy.containsKey(from) && rasa_Response.equalsIgnoreCase("yes")) || (policy.containsKey(from) && rasa_Response.contains("@") && rasa_Response.contains(".com")))// || (policy.containsKey(from) && policy.get(from).getContactNo() != null))
 		{
-			if(!(rasa_Response.contains("@")) && (policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance"))){
-				reply ="Please enter your name, contact number and email id";
+			if(rasa_Response.equalsIgnoreCase("yes") && policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance") && policy.get(from).getContactNo() == null)
+			{
+				policy.get(from).setContactNo("");
+				reply ="Please enter your contact number with country code.(+91 8899456251)";
 				sendMessage(from, reply);
-			}else{
-				if(policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance")){
-				reply="\nHere is your Quotation with Reference No: 1701000023"
-						+"\n"
-						+"\nComprehensive Insurance"
-						+"\na.   Basic Plan – QR 1,250 (Click here to view the Basic Plan details)"
-						+"\nb.  Premium Plan – QR 1,500 (Click here to view the Premium Plan details)"
-						+"\nc. Premium Plus Plan – QR 1,800 (Click here to view the Premium Plus Plan details)"
-						+"\n   Third Party Insurance"
-						+"\nd. TP Basic – QR 400 "
-						+"\ne.  continue with default"                                                  
-						+"\n   Please enter your selected plan number ";
-				}else{
-					reply="\nHere is your Quotation with Reference No: 1701000023"
+
+			}else if(!(rasa_Response.contains("@")) && (policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance")) && policy.get(from).getContactNo().contains("91") )
+			{
+				reply ="Please enter your Email Id.";
+				sendMessage(from, reply);
+
+			}else
+			{
+				policy.get(from).setPolicyQuoteNo(""+random.nextInt(100000000+846572));
+				if(policy.get(from).getOption().equalsIgnoreCase("Buy new Motor Insurance"))
+				{
+					reply="Dear Custemer, Here is your Quotation with Reference No: "+policy.get(from).getPolicyQuoteNo()
 							+"\n"
 							+"\nComprehensive Insurance"
-							+"\na.   Basic Plan – QR 1,250 (Click here to view the Basic Plan details)"
-							+"\nb.  Premium Plan – QR 1,500 (Click here to view the Premium Plan details)"
-							+"\nc. Premium Plus Plan – QR 1,800 (Click here to view the Premium Plus Plan details)"
-							+"\n   Third Party Insurance"
-							+"\nd. TP Basic – QR 400 "
+							+"\na.  Basic Plan QR 1,250 (Click here to view the Basic Plan details.)"
+							+"\nb.  Premium Plan QR 1,500 (Click here to view the Premium Plan details.)"
+							+"\nc.  Premium Plus Plan QR 1,800 (Click here to view the Premium Plus Plan details.)"
+							+"\n  Third Party Insurance"
+							+"\nd.  TP Basic QR 400 "
+							+"\ne.  continue with default"                                                  
+							+"\n   Please enter your selected plan number ";
+				}else
+				{
+					reply="\nDear Custemer, Here is your Quotation with Reference No: "+policy.get(from).getPolicyQuoteNo()
+							+"\n"
+							+"\nComprehensive Insurance"
+							+"\na.  Basic Plan: QR 1,250 (Click here to view the Basic Plan details.)"
+							+"\nb.  Premium Plan: QR 1,500 (Click here to view the Premium Plan details.)"
+							+"\nc.Premium Plus Plan: QR 1,800 (Click here to view the Premium Plus Plan details.)"
+							+"\n    Third Party Insurance"
+							+"\nd.  TP Basic: QR 400 "
 							+"\ne.  continue with default"                                                  
 							+"\n Please Select plan for renewal and enter your selected plan number";
 				}
@@ -559,30 +769,34 @@ public class WhatsApp implements WhatsAppImplementation {
 			}
 		}
 
-		String t = "Basic Plan QR 1250 Premium Plan QR 1500 Premium Plus Plan QR 1800 TP Basic QR 400 continue with default";
-		if(policy.containsKey(from) && (t.contains(rasa_Response)))
+		if(policy.containsKey(from) && (rasa_Response.equalsIgnoreCase("Basic Plan QR 1250") || rasa_Response.equalsIgnoreCase("Premium Plan QR 1500")  || rasa_Response.equalsIgnoreCase("Premium Plus QR 1800") || rasa_Response.equalsIgnoreCase("TP Basic QR 400") || rasa_Response.equalsIgnoreCase("continue with default")))
 		{
+			policy.get(from).setPlanName(rasa_Response);
 			String[] p= rasa_Response.split(" ");
-			policy.get(from).setPlanName(p[p.length-1]);
+			policy.get(from).setPlanPrem(p[p.length-1]);
 			reply="Would you like to add any of below optional covers?" 
 					+"\n"
-					+"\nI.  Off Road Cover: QR 150 (Covers during off roads like sand dunes etc.,)"
-					+"\nII. Geographical extension: QR 200"
+					+"\n  I. Off Road Cover: QR 150 (Covers during off roads like sand dunes etc.)"
+					+"\n II. Geographical extension: QR 200"
 					+"\nIII. Social Responsibility: QR 150";
 			sendMessage(from, msg);
 		}
 
 		boolean flag =false;
 
-		if((policy.containsKey(from) && (rasa_Response.equalsIgnoreCase("no  thanks") || rasa_Response.contains("No"))))
+		if(policy.containsKey(from) && rasa_Response.equalsIgnoreCase("no  thanks"))
 		{
+			policy.get(from).isCover =false;
 			flag = true;
 		}
 		int prem = 0;
 		try{
-		 prem = Integer.valueOf((String)policy.get(from).getPlanName());
+
+			prem = Integer.valueOf((String)policy.get(from).getPlanPrem());
+			policy.get(from).setPlanPrem(""+prem);
+
 		}catch(Exception e){}
-		if((policy.containsKey(from) && ((rasa_Response.equalsIgnoreCase("i") || rasa_Response.equalsIgnoreCase("ii") || rasa_Response.equalsIgnoreCase("iii")))) || ((policy.containsKey(from) && (rasa_Response.equalsIgnoreCase("no  thanks") || rasa_Response.contains("No")))))
+		if((policy.containsKey(from) && ((rasa_Response.equalsIgnoreCase("i") || rasa_Response.equalsIgnoreCase("ii") || rasa_Response.equalsIgnoreCase("iii")))) || ((policy.containsKey(from) && (rasa_Response.equalsIgnoreCase("no  thanks")))))
 		{
 			if(flag == true)
 			{
@@ -590,22 +804,24 @@ public class WhatsApp implements WhatsAppImplementation {
 
 				sendMessage(from, reply);
 			}
-				if(rasa_Response.equalsIgnoreCase("i")){
-					prem = prem + 150;
-				}else if(rasa_Response.equalsIgnoreCase("ii")){
-					prem = prem + 200;
-				}else if(rasa_Response.equalsIgnoreCase("iii")){
-					prem = prem + 150;
-				}
+			if(rasa_Response.equalsIgnoreCase("i")){
+				prem = prem + 150;
+			}else if(rasa_Response.equalsIgnoreCase("ii")){
+				prem = prem + 200;
+			}else if(rasa_Response.equalsIgnoreCase("iii")){
+				prem = prem + 150;
+			}
+			policy.get(from).setPlanPrem(""+prem);
 			reply="Your total Premium: QR "+prem
 					+"\nPlease click on below link to pay the Premium using your Credit/Debit Cards"
 					+"\nhttps://www.qic-insured.com/PayLink.do?RefNo=1701000023"
 					+"\n"
-					+"\nUpon confirmation of payment, documents will be emailed to varun@kumar.com"
-					+"\nThanks for choosing QIC Insured.";
+					+"\nUpon confirmation of payment, documents will be emailed to kishor@kumar.com"
+					+"\n"
+					+"\nThank you for your valuable time ! Ping us again and we are at your service 24x7.";
 			sendMessage(from, reply);
 
-			reply ="Type 'EXIT' to terminat the conversation.";
+			reply ="Type 'EXIT' to terminate the conversation.";
 			sendMessage(from, reply);
 		}
 
@@ -622,10 +838,10 @@ public class WhatsApp implements WhatsAppImplementation {
 		{
 			policy.get(from).setStart(false);
 			policy.remove(from);
-			reply="Hi,"+from+" Your session has ben teminated Please ping us again \n Thank You !! ";
+			reply="Good bye..! Have a nice day.";
 			sendMessage(from, reply);
 		}
-		else if(reply.equalsIgnoreCase("No valid input") && !(from.equals("8698206727"))  || !(from.equals("8698206727"))){
+		else if(reply.equalsIgnoreCase("Sorry! You have entered invalid input.") && !(from.equals("8698206727"))  || !(from.equals("8698206727"))){
 			//reply="Invalid Option\n"+reply;
 			policy.get(from).setStart(false);
 			policy.remove(from);
@@ -635,7 +851,6 @@ public class WhatsApp implements WhatsAppImplementation {
 		}
 		/*
 		if (policy.containsKey(from)&& policy.get(from).isStart() && msg.equalsIgnoreCase("exit"))
-
 		{
 
 			policy.get(from).setStart(false);
@@ -653,6 +868,85 @@ public class WhatsApp implements WhatsAppImplementation {
 		}*/
 		return removeSpecialCharacter(reply);
 
+	}
+
+	private static boolean getMail(String email )
+	{
+
+		String[] str = email.split(" ");
+
+		for(int i=0; i<str.length; i++){
+			if(str[i].contains("@") || str[i].contains(".")){
+				email = str[i];
+			}
+		}
+		System.out.println("Emial Id="+email);
+		boolean flag1 = true;
+		boolean flag2 = false;
+		boolean flag3 = false;
+		boolean flag4 = false;
+		boolean flag5 = false;
+		boolean flag6 = false;
+		int count = 0;
+
+		int temp = email.length();
+		if(email.contains("@")){
+			flag2=true;
+			int a=email.indexOf("@");
+			for(int i=a;i<temp;i++){
+				if(email.charAt(i)=='.'){
+					flag3=true; 
+					count=count+1;
+				}
+			}
+			if(count<1||count>2){
+				flag4=false;
+			}
+			else{
+				flag4=true;
+			}
+		}
+		else{
+			flag2 =false;
+			System.out.println("No @ symbol present");
+			return false;
+		}
+
+
+		//Condition 3
+		if(email.matches("[A-Z a-z 0-9_]+@.*")) //Unable to get the right RegEx here!
+			flag5 = true;
+		else
+			flag5 = false;
+
+		//Condition4
+		if(!Character.isUpperCase(email.charAt(0))==true)
+			flag6 = true;
+		else
+			flag6=false;
+
+		if(flag1==true && flag2==true && flag3==true && flag4==true && flag5==true &&flag6==true){
+			System.out.println("Email ID is valid");
+			return true;
+		}	    else{
+			if(flag1==false){
+				System.out.println("Inavlid length of Email ID");
+				return false;
+			}
+			if(flag2==false||flag3==false||flag4==false){
+				System.out.println("Invalid Position of Special Characters");
+				return false;
+			}
+			if(flag5==false){
+				System.out.println("Invalid combination for username");
+				return false;
+			}
+			if(flag6==false){
+				System.out.println("Invalid case of first letter");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public boolean processMessage(String key)
